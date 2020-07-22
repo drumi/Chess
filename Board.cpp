@@ -58,4 +58,5 @@ void Board::move(int x, int y, int xdest, int ydest)
 
     m_board[y][x].setMoved();
     m_board[ydest][xdest] = m_board[y][x];
+    m_board[y][x].setType(PieceType::EMPTY);
 }

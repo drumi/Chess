@@ -27,4 +27,5 @@ class Piece
     bool hasMoved() const { return m_hasMoved; }
     PieceType getType() const { return m_type; }
     void setMoved() { m_hasMoved = true; }
+    void setType(PieceType t) { m_type = t;}
 };

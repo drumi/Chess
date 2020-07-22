@@ -41,6 +41,22 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             }
             break;
         case PieceType::ROOK:
+            if(x != xdest && y != ydest) // Check if we move horizontally or vertically
+                return false;
+            else if(x == xdest) 
+            {
+                // Check if there are no figures between
+                for(int i = std::min(y, ydest) + 1; i < std::max(y, ydest); ++i)
+                    if((*pieces)[i][x].getType() != PieceType::EMPTY)
+                        return false;
+            }
+            else if(y == ydest) 
+            {
+                // Check if there are no figures between
+                for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest) - 1; ++i)
+                    if((*pieces)[y][i].getType() != PieceType::EMPTY)
+                        return false;
+            }
             break;
         case PieceType::KNIGHT:
             // Check G move 

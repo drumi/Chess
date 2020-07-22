@@ -37,6 +37,18 @@ TEST_CASE("knight movement validator")
     CHECK_FALSE(MoveValidator::isValid(b, 1, 0, 1, 2));
 }
 
+TEST_CASE("rook movement validator")
+{
+    Board b;
+    b.move(0,1,2,2);
+
+    CHECK(MoveValidator::isValid(b, 0, 0, 0, 4));
+    CHECK(MoveValidator::isValid(b, 0, 0, 0, 6));
+    CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 1, 0));
+    CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 0, 7));
+    CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 1, 2));
+}
+
 int main()
 {
     doctest::Context().run();
