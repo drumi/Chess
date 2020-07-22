@@ -7,5 +7,6 @@ private:
     MoveValidator(){}
 public:
     static bool isValid(Board const& board, int x, int y, int xdest, int ydest, int xEnpassant = -1);
+    static bool isKingUnderCheck(Board const& board, bool isWhite = true);
 };
 

@@ -3,13 +3,13 @@
 
 std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForWhite, int xEnpassant)
 {
-    Piece const** pieces = board.getPieces();
+    matrp pieces = board.getPieces();
 
     for (size_t i = 0; i < 8; i++)
     {
         for (size_t j = 0; j < 8; j++)
         {
-            switch (pieces[i][j].getType())
+            switch ((*pieces)[i][j].getType())
             {
             case PieceType::EMPTY:
                 continue;
