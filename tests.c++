@@ -32,6 +32,7 @@ TEST_CASE("pawn validator test")
 TEST_CASE("knight movement validator")
 {
     Board b;
+    assert(((*b.getPieces())[0][1].getType() == PieceType::KNIGHT));
 
     CHECK(MoveValidator::isValid(b, 1, 0, 2, 2));
     CHECK(MoveValidator::isValid(b, 1, 0, 0, 2));
@@ -42,7 +43,8 @@ TEST_CASE("rook movement validator")
 {
     Board b;
     b.move(0,1,2,2);
-
+    assert(((*b.getPieces())[0][0].getType() == PieceType::ROOK));
+    
     CHECK(MoveValidator::isValid(b, 0, 0, 0, 4));
     CHECK(MoveValidator::isValid(b, 0, 0, 0, 6));
     CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 1, 0));
@@ -63,6 +65,22 @@ TEST_CASE("bishop movement validator")
     CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 5, 4));
     CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 5, 2));
     CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 1, 1));
+}
+
+TEST_CASE("queen movement validator")
+{
+    Board b;
+    b.move(3,0,4,4);
+    assert(((*b.getPieces())[4][4].getType() == PieceType::QUEEN));
+    CHECK(MoveValidator::isValid(b, 4, 4, 5, 5));
+    CHECK(MoveValidator::isValid(b, 4, 4, 6, 6));
+    CHECK(MoveValidator::isValid(b, 4, 4, 0, 4));
+    CHECK(MoveValidator::isValid(b, 4, 4, 4, 6));
+    CHECK(MoveValidator::isValid(b, 4, 4, 3, 5));
+
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 6, 7));
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 7, 7));
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 1, 1));
 }
 
 

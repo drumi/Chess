@@ -104,6 +104,58 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             }
             break;
         case PieceType::QUEEN:
+            if(x != xdest && y != ydest && xdest - ydest != x - y && xdest + ydest != x + y) // Check if we move like bishop or rook
+                    return false;
+                else if(x == xdest) 
+                {
+                    // Check if there are no figures between
+                    for(int i = std::min(y, ydest) + 1; i < std::max(y, ydest); ++i)
+                        if((*pieces)[i][x].getType() != PieceType::EMPTY)
+                            return false;
+                }
+                else if(y == ydest) 
+                {
+                    // Check if there are no figures between
+                    for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest) - 1; ++i)
+                        if((*pieces)[y][i].getType() != PieceType::EMPTY)
+                            return false;
+                }
+                else if(xdest - ydest == x - y)
+            {
+                int minx = std::min(xdest,x);
+                int miny = std::min(ydest, y);
+                
+                int maxx = std::max(xdest,x);
+                int maxy = std::max(ydest, y);
+
+                ++minx;
+                ++miny;
+                while(minx != maxx)
+                {
+                    if((*pieces)[miny][minx].getType() != PieceType::EMPTY)
+                        return false;
+                    ++minx;
+                    ++miny;
+                }
+            }
+            else if(xdest + ydest == x + y)
+            {
+                int minx = std::min(xdest,x);
+                int miny = std::min(ydest, y);
+                
+                int maxx = std::max(xdest,x);
+                int maxy = std::max(ydest, y);
+
+                ++minx;
+                --maxy;
+                while(minx != maxx)
+                {
+                    if((*pieces)[maxy][minx].getType() != PieceType::EMPTY)
+                        return false;
+                    ++minx;
+                    --maxy;
+                }
+            }
             break;
         case PieceType::KING:
             break;
