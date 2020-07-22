@@ -1,6 +1,7 @@
 #include "MoveValidator.h"
 #include <cassert>
 #include <iostream>
+#include <functional>
 
 bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int ydest, int xEnpassant)
 {
@@ -212,6 +213,89 @@ bool MoveValidator::isSquareUnderAttack(Board const& board, int x, int y, bool f
     if(isUnderAttack)
         return true;
 
+    // Check for attack horizontally up
+    for(int i = x + 1; i < 8; ++i)
+    {
+        Piece piece = (*pieces)[y][i];
+        if(piece.getType() != PieceType::EMPTY)
+        {
+            if(piece.isWhite() != fromWhite) // We are blocked from a figure of same color
+                break;
+            else
+            {
+                if(piece.getType() == PieceType::KING && abs(i - x) == 1) // Attacked by king
+                    return true;
+                else if(piece.getType() == PieceType::ROOK || piece.getType() == PieceType::QUEEN) // Attacked by Queen/rook
+                    return true;
+                else
+                    break; // Blocked by figure from other color that cannot attack us
+            }
+            
+        }
+    }
+
+    // Check for attack horizontally down
+    for(int i = x - 1; i >= 0; --i)
+    {
+        Piece piece = (*pieces)[y][i];
+        if(piece.getType() != PieceType::EMPTY)
+        {
+            if(piece.isWhite() != fromWhite) // We are blocked from a figure of same color
+                break;
+            else
+            {
+                if(piece.getType() == PieceType::KING && abs(i - x) == 1) // Attacked by king
+                    return true;
+                else if(piece.getType() == PieceType::ROOK || piece.getType() == PieceType::QUEEN) // Attacked by Queen/rook
+                    return true;
+                else
+                    break; // Blocked by figure from other color that cannot attack us
+            }
+            
+        }
+    }
+
+    // Check for attack vertically down
+    for(int i = y - 1; i >= 0; --i)
+    {
+        Piece piece = (*pieces)[x][i];
+        if(piece.getType() != PieceType::EMPTY)
+        {
+            if(piece.isWhite() != fromWhite) // We are blocked from a figure of same color
+                break;
+            else
+            {
+                if(piece.getType() == PieceType::KING && abs(i - y) == 1) // Attacked by king
+                    return true;
+                else if(piece.getType() == PieceType::ROOK || piece.getType() == PieceType::QUEEN) // Attacked by Queen/rook
+                    return true;
+                else
+                    break; // Blocked by figure from other color that cannot attack us
+            }
+            
+        }
+    }
+
+    // Check for attack vertically up
+    for(int i = y + 1; i < 8; ++i)
+    {
+        Piece piece = (*pieces)[x][i];
+        if(piece.getType() != PieceType::EMPTY)
+        {
+            if(piece.isWhite() != fromWhite) // We are blocked from a figure of same color
+                break;
+            else
+            {
+                if(piece.getType() == PieceType::KING && abs(i - y) == 1) // Attacked by king
+                    return true;
+                else if(piece.getType() == PieceType::ROOK || piece.getType() == PieceType::QUEEN) // Attacked by Queen/rook
+                    return true;
+                else
+                    break; // Blocked by figure from other color that cannot attack us
+            }
+            
+        }
+    }
 
     return false;
 }
