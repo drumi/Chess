@@ -24,7 +24,7 @@ class Piece
 
     bool isWhite() const { return m_isWhite; }
     bool hasMoved() const { return m_hasMoved; }
-    char getType() const { return m_type; }
+    PieceType getType() const { return m_type; }
     std::pair<int,int> getPosition() const { return m_position; }
     void move(std::pair<int, int> p);
 };
