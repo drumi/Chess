@@ -6,6 +6,25 @@ Board::Board()
     init();
 }
 
+Board::Board(Piece const** _board)
+{
+    for (size_t i = 0; i < 8; i++)
+    {
+        for (size_t j = 0; j < 8; j++)
+        {
+            m_board[i][j] = _board[i][j];
+        }
+        
+    }
+    
+}
+
+Board::Board(Board const& _board)
+{
+    Board(_board.getPieces());
+}
+
+
 void Board::init()
 {
     for (size_t i = 0; i < 8; i++)
@@ -36,9 +55,7 @@ void Board::init()
 void Board::move(int x, int y, int xdest, int ydest)
 {
     assert(x < 8 && y < 8 && xdest < 8 && ydest < 8 && x >=0 && y >= 0 && xdest >= 0 && ydest >= 0);
-    
-    m_board[x][y].setMoved();
-    m_board[xdest][ydest].setMoved();
 
-    std::swap(m_board[x][y], m_board[xdest][ydest]);
+    m_board[x][y].setMoved();
+    m_board[xdest][ydest] = m_board[x][y];
 }
