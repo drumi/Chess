@@ -3,13 +3,13 @@
 
 enum PieceType
 {
+    EMPTY,
     PAWN,
     ROOK,
     KNIGHT,
     BISHOP,
     QUEEN,
     KING,
-    EMPTY
 };
 
 class Piece

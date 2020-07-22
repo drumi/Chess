@@ -20,9 +20,7 @@ Board::Board(boardArrPtr _board)
 }
 
 Board::Board(Board const& _board)
-{
-    Board(_board.getPieces());
-}
+:Board(_board.getPieces()){}
 
 
 void Board::init()
@@ -52,11 +50,42 @@ void Board::init()
     m_board[7][7] = Piece(true, PieceType::ROOK);
 }
 
-void Board::move(int x, int y, int xdest, int ydest)
+Board& Board::move(int x, int y, int xdest, int ydest)
 {
     assert(x < 8 && y < 8 && xdest < 8 && ydest < 8 && x >=0 && y >= 0 && xdest >= 0 && ydest >= 0);
 
     m_board[y][x].setMoved();
     m_board[ydest][xdest] = m_board[y][x];
     m_board[y][x].setType(PieceType::EMPTY);
+
+    return *this;
+}
+
+bool Board::operator == (Board const& other) const
+{
+    for (size_t i = 0; i < 8; i++)
+    {
+        for (size_t j = 0; j < 8; j++)
+        {
+            if(m_board[i][j].getType() != other.m_board[i][j].getType() || 
+               m_board[i][j].isWhite() != other.m_board[i][j].isWhite())
+                return false;
+        }
+    }
+    return true;
+}
+
+std::ostream& operator << (std::ostream& out, Board const& board)
+{
+    boardArrPtr pieces = board.getPieces();
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        for (size_t j = 0; j < 8; j++)
+        {
+            out << (*pieces)[i][j].getType();
+        }
+        out << std::endl;
+    }
+    return out;
 }

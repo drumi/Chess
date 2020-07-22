@@ -13,7 +13,7 @@ TEST_CASE("pawn validator test")
         CHECK(MoveValidator::isValid(b, i, 1, i, 3));
 
         CHECK_FALSE(MoveValidator::isValid(b, i, 1, i, 0));
-        CHECK_FALSE(MoveValidator::isValid(b, i, 1, i+1, 2));
+        CHECK_FALSE(MoveValidator::isValid(b, i, 1, i + 1, 2));
         CHECK_FALSE(MoveValidator::isValid(b, i, 1, i, 4));
     }
 
@@ -205,6 +205,44 @@ TEST_CASE("King under attack")
     assert(((*b2.getPieces())[4][7].getType() == PieceType::ROOK));
 
     CHECK(MoveValidator::isKingUnderCheck(b2, false));
+}
+
+TEST_CASE("Board copying")
+{
+    Board b, b3;
+
+    CHECK(b3 == b);
+
+    b.move(2, 1, 2, 3);
+    b.move(6, 6, 3, 3);
+
+    Board b2 = b;
+
+    CHECK(b2 == b);
+
+    b.move(0, 0, 0, 1);
+
+    CHECK_FALSE(b2 == b);
+
+    b2.move(0, 0, 0, 1);
+
+}
+
+TEST_CASE("En passant validator")
+{
+    Board b, b2;
+    b.move(2, 1, 2, 3);
+    b.move(6, 6, 3, 3);
+
+    CHECK(MoveValidator::isValid(b, 3, 3, 2, 2, 2));
+
+    b2.move(2, 1, 2, 3);
+    b2.move(6, 6, 3, 3);
+
+    b2.move(2, 0, 1, 2);
+    b2.move(4, 7, 4, 5);
+
+    CHECK_FALSE(MoveValidator::isValid(b2, 3, 3, 2, 2, 2));
 }
 
 int main()

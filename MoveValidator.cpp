@@ -6,7 +6,6 @@
 bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int ydest, int xEnpassant)
 {
     boardArrPtr pieces = board.getPieces();
-
     // Check if coordinates are out of bounds or they are the same
     if(x > 8 || y > 8 || x < 0 || y < 0 || xdest > 8 || ydest > 8 || xdest < 0 || ydest < 0 || (x == xdest && y == ydest))
         return false;
@@ -36,8 +35,15 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                 {
                     if(xdest != xEnpassant) // Check en passant rule
                         return false;
-                    else if(piece.isWhite() && ydest != 1 || !piece.isWhite() && ydest != 6)
+                    else if(piece.isWhite() && ydest != 2 || !piece.isWhite() && ydest != 5)
                         return false;
+                    else
+                    {
+                        if(piece.isWhite() && isKingUnderCheck(Board(board).removePiece(xdest, 3), true))
+                            return false;
+                        else if(!piece.isWhite() && isKingUnderCheck(Board(board).removePiece(xdest, 4), false))
+                            return false;
+                    }
                 } 
             }
             break;
@@ -189,6 +195,7 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             assert(false);
             break;
     }
+
     return !isKingUnderCheck(board, !piece.isWhite());
 }
 
@@ -231,7 +238,8 @@ bool MoveValidator::isSquareUnderAttack(Board const& board, int x, int y, bool f
 
     std::pair<int, int> initValue[] = {{x + 1, y}, {x - 1, y}, {x, y + 1}, {x, y - 1}, {x + 1, y + 1}, { x + 1, y - 1}, {x - 1, y - 1}, {x - 1, y + 1}};
     std::function<void(int&, int&)> next[]  = {[](int& a, int& b){ ++a; }, [](int& a, int& b){ --a; }, [](int& a, int& b){ ++b; }, [](int& a, int& b){ --b; }, [](int& a, int& b){ ++a; ++b; }, [](int& a, int& b){ ++a; --b; }, [](int& a, int& b){ --a; --b; }, [](int& a, int& b){ --a; ++b; }};
-    std::function<bool(int, int)> check[] = {[](int a, int b) { return a < 8;}, [](int a, int b) { return a >= 0;}, [](int a, int b) { return b < 8;}, [](int a, int b) { return b >= 0;}, [](int a, int b) { return a < 8 && b < 8;}, [](int a, int b) { return a < 8 && b >= 0;}, [](int a, int b) { return a >= 0 && b < 8;}, [](int a, int b) { return a >= 0 && b < 8;}};
+    std::function<bool(int, int)> check[] = {[](int a, int b) { return a < 8;}, [](int a, int b) { return a >= 0;}, [](int a, int b) { return b < 8;}, [](int a, int b) { return b >= 0;}, [](int a, int b) { return a < 8 && b < 8;}, [](int a, int b) { return a < 8 && b >= 0;}, [](int a, int b) { return a >= 0 && b >= 0;}, [](int a, int b) { return a >= 0 && b < 8;}};
+    
     for(int i, j, k=0; k < 8; ++k)
     {
         for(i = initValue[k].first, j = initValue[k].second; check[k](i, j); next[k](i, j))
