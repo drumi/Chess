@@ -39,9 +39,9 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                         return false;
                     else
                     {
-                        if(piece.isWhite() && isKingUnderCheck(Board(board).removePiece(xdest, 3), true))
+                        if(piece.isWhite() && isKingUnderCheck(Board(board).remove(xdest, 3), true))
                             return false;
-                        else if(!piece.isWhite() && isKingUnderCheck(Board(board).removePiece(xdest, 4), false))
+                        else if(!piece.isWhite() && isKingUnderCheck(Board(board).remove(xdest, 4), false))
                             return false;
                     }
                 } 
