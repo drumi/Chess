@@ -3,6 +3,8 @@
 #include "Piece.h"
 #include <vector>
 
+typedef Piece const (*boardArrPtr)[8][8];
+
 class Board
 {
     private:
@@ -11,8 +13,8 @@ class Board
 
     public:
     Board();
-    Board(Piece const** _board);
+    Board(boardArrPtr _board);
     Board(Board const& _board);
     void move(int x, int y, int xdest, int ydest); //TODO push on stack history
-    Piece const** getPieces() const { return (Piece const**)m_board; }
+    boardArrPtr getPieces() const { return &m_board; }
 };

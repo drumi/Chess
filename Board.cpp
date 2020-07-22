@@ -6,13 +6,13 @@ Board::Board()
     init();
 }
 
-Board::Board(Piece const** _board)
+Board::Board(boardArrPtr _board)
 {
     for (size_t i = 0; i < 8; i++)
     {
         for (size_t j = 0; j < 8; j++)
         {
-            m_board[i][j] = _board[i][j];
+            m_board[i][j] = (*_board)[i][j];
         }
         
     }
