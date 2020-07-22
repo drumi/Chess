@@ -126,6 +126,13 @@ TEST_CASE("casting movement validator")
     CHECK_FALSE(MoveValidator::isValid(b, 4, 0, 6, 0));
 }
 
+TEST_CASE("Square under attack")
+{
+    Board b;
+    CHECK(MoveValidator::isSquareUnderAttack(b, 0, 2, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b, 2, 2, false));
+}
+
 int main()
 {
     doctest::Context().run();
