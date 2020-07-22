@@ -18,7 +18,7 @@ class Board
     Board(Board const& _board);
     Board& move(int x, int y, int xdest, int ydest); //TODO push on stack history
     boardArrPtr getPieces() const { return &m_board; }
-    Board& removePiece(int x, int y) { m_board[y][x].setType(PieceType::EMPTY); return *this;};
+    Board& remove(int x, int y) { m_board[y][x].setType(PieceType::EMPTY); return *this;};
     bool operator == (Board const& other) const;
 };
 
