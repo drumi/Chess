@@ -8,7 +8,8 @@ enum PieceType
     KNIGHT,
     BISHOP,
     QUEEN,
-    KING
+    KING,
+    EMPTY
 };
 
 class Piece
@@ -20,11 +21,10 @@ class Piece
     std::pair<int,int> m_position;
 
     public:
-    Piece(bool _isWhite = true, PieceType _type = PieceType::PAWN);
+    Piece(bool _isWhite = true, PieceType _type = PieceType::EMPTY);
 
     bool isWhite() const { return m_isWhite; }
     bool hasMoved() const { return m_hasMoved; }
     PieceType getType() const { return m_type; }
-    std::pair<int,int> getPosition() const { return m_position; }
-    void move(std::pair<int, int> p);
+    void setMoved() { m_hasMoved = true; }
 };
