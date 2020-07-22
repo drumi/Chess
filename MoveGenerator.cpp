@@ -24,7 +24,10 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                     for (size_t i = -1; i <= 1; i++)
                     {
                         if(MoveValidator::isValid(board, x, y, x + i, y - 1, xEnpassant))
-                            result.push_back(Board(board).move(x, y, x + i, y - 1));
+                            if(x + i == xEnpassant && y == 2)
+                                result.push_back(Board(board).move(x, y, x + i, y - 1).remove(xEnpassant, 3));
+                            else
+                                result.push_back(Board(board).move(x, y, x + i, y - 1));
                     }
                     
                 }
@@ -35,7 +38,10 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                     for (size_t i = -1; i <= 1; i++)
                     {
                         if(MoveValidator::isValid(board, x, y, x + i, y + 1, xEnpassant))
-                            result.push_back(Board(board).move(x, y, x + i, y + 1));
+                            if(x + i == xEnpassant && y == 5)
+                                result.push_back(Board(board).move(x, y, x + i, y + 1).remove(xEnpassant, 4));
+                            else
+                                result.push_back(Board(board).move(x, y, x + i, y + 1));
                     }
                 }
                 
@@ -47,8 +53,7 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                         result.push_back(Board(board).move(x, y, i, y));
                     if(MoveValidator::isValid(board, x, y, x, i))
                         result.push_back(Board(board).move(x, y, x, i));
-                }
-                
+                }   
                 break;
             case PieceType::KNIGHT:
                 for(int i = -1; i <= 1; i += 2)
@@ -63,17 +68,46 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
             case PieceType::BISHOP:
                 for (size_t i = x; i < 8; i++)
                 {
-                    for (size_t j = y; j < 8; j++)
-                    {
-                        /* code */
-                    }
-                    
+                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                        result.push_back(Board(board).move(x, y, x + i, y + i));
+                    if(MoveValidator::isValid(board, x, y, x + i, y - i))
+                        result.push_back(Board(board).move(x, y, x + i, y - i));
+                    if(MoveValidator::isValid(board, x, y, x - i, y + i))
+                        result.push_back(Board(board).move(x, y, x - i, y + i));
+                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                        result.push_back(Board(board).move(x, y, x - i, y - i));
                 }
-            
                 break;
             case PieceType::QUEEN:
+                for (size_t i = x; i < 8; i++)
+                {
+                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                        result.push_back(Board(board).move(x, y, x + i, y + i));
+                    if(MoveValidator::isValid(board, x, y, x + i, y - i))
+                        result.push_back(Board(board).move(x, y, x + i, y - i));
+                    if(MoveValidator::isValid(board, x, y, x - i, y + i))
+                        result.push_back(Board(board).move(x, y, x - i, y + i));
+                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                        result.push_back(Board(board).move(x, y, x - i, y - i));
+                }
+                for (size_t i = 0; i < 8; ++i)
+                {
+                    if(MoveValidator::isValid(board, x, y, i, y))
+                        result.push_back(Board(board).move(x, y, i, y));
+                    if(MoveValidator::isValid(board, x, y, x, i))
+                        result.push_back(Board(board).move(x, y, x, i));
+                }
                 break;
             case PieceType::KING:
+                if(MoveValidator::isValid(board, x, y, x-2, y))
+                    result.push_back(Board(board).move(x, y, x-2, y).move(0, y, 3, y));
+                if(MoveValidator::isValid(board, x, y, x+2, y))
+                    result.push_back(Board(board).move(x, y, x+2, y).move(7, y, 5, y));
+
+                for(int i = x-1; i <= x + 1; ++i)
+                    for(int j = y-1; j <= y + 1; ++j)
+                        if(MoveValidator::isValid(board, x, y, i, j))
+                            result.push_back(Board(board).move(x, y, i, j));
                 break;
             default:
                 assert(false);
