@@ -158,6 +158,31 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             }
             break;
         case PieceType::KING:
+            if(abs(y - ydest) > 1 || abs(x - xdest) > 2) // Check if we move more than allowed
+                return false;
+            else if(abs(x - xdest) == 2) // Trying castling
+            {
+                if(piece.hasMoved())
+                    return false;
+                if(xdest > x)
+                {
+                    if((*pieces)[ydest][7].hasMoved())
+                        return false;
+                    if(((*pieces)[y][x + 1].getType() != PieceType::EMPTY) || ((*pieces)[y][x + 2].getType() != PieceType::EMPTY))
+                        return false;
+                    if(isSquareUnderAttack(board, x, y, !piece.isWhite()) ||isSquareUnderAttack(board, x + 1, y, !piece.isWhite()) || isSquareUnderAttack(board, x + 2, y, !piece.isWhite()))
+                        return false;
+                }
+                else
+                {
+                    if((*pieces)[ydest][0].hasMoved())
+                        return false;
+                    if(((*pieces)[y][x - 1].getType() != PieceType::EMPTY) || ((*pieces)[y][x - 2].getType() != PieceType::EMPTY || ((*pieces)[y][x - 3].getType() != PieceType::EMPTY)))
+                        return false;
+                    if(isSquareUnderAttack(board, x, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 1, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 2, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 3, y, !piece.isWhite()))
+                        return false;
+                }
+            }
             break;
         default:
             assert(false);
@@ -166,7 +191,13 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
     return true;
 }
 
-static bool isKingUnderCheck(Board const& board, bool isWhite)
+bool MoveValidator::isSquareUnderAttack(Board const& board, int x, int y, bool isWhite)
+{
+    return false;
+}
+
+
+bool MoveValidator::isKingUnderCheck(Board const& board, bool fromWhite)
 {
     return false;
 }

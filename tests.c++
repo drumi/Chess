@@ -83,6 +83,48 @@ TEST_CASE("queen movement validator")
     CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 1, 1));
 }
 
+TEST_CASE("king movement validator")
+{
+    Board b;
+    b.move(4, 0, 4, 4);
+    assert(((*b.getPieces())[4][4].getType() == PieceType::KING));
+    CHECK(MoveValidator::isValid(b, 4, 4, 5, 5));
+    CHECK(MoveValidator::isValid(b, 4, 4, 3, 3));
+    CHECK(MoveValidator::isValid(b, 4, 4, 3, 4));
+
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 6, 4));
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 2, 4));
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 1, 1));
+}
+
+TEST_CASE("casting movement validator")
+{
+    Board b;
+
+    assert(((*b.getPieces())[0][4].getType() == PieceType::KING));
+
+    b.move(1, 0, 1, 4);
+    b.move(2, 0, 2, 4);
+    b.move(3, 0, 3, 4);
+
+    CHECK(MoveValidator::isValid(b, 4, 0, 2, 0));
+
+    b.move(0, 0, 0, 4);
+    b.move(0, 4, 0, 0);
+
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 0, 2, 0));
+
+
+    b.move(6, 0, 6, 4);
+    b.move(5, 0, 5, 4);
+
+    CHECK(MoveValidator::isValid(b, 4, 0, 6, 0));
+
+    b.move(4, 0, 4, 4);
+    b.move(4, 4, 4, 0);
+
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 0, 6, 0));
+}
 
 int main()
 {
