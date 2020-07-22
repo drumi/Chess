@@ -3,7 +3,7 @@
 
 std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForWhite, int xEnpassant)
 {
-    matrp pieces = board.getPieces();
+    boardArrPtr pieces = board.getPieces();
 
     for (size_t i = 0; i < 8; i++)
     {

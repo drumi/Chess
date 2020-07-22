@@ -18,14 +18,23 @@ TEST_CASE("pawn validator test")
 
     b.move(6,6,6,2);
 
-    CHECK(MoveValidator::isValid(b, 6, 0, 6, 2));
-    CHECK_FALSE(MoveValidator::isValid(b, 6, 3, 6, 2));
-    CHECK(MoveValidator::isValid(b, 6, 1, 6, 2));
+    CHECK(MoveValidator::isValid(b, 5, 1, 6, 2));
+    CHECK_FALSE(MoveValidator::isValid(b, 6, 1, 6, 2));
+    CHECK(MoveValidator::isValid(b, 7, 1, 6, 2));
 
     b.move(1,1,2,2);
 
     CHECK_FALSE(MoveValidator::isValid(b, 2, 1, 2, 2));
 
+}
+
+TEST_CASE("knight movement validator")
+{
+    Board b;
+
+    CHECK(MoveValidator::isValid(b, 1, 0, 2, 2));
+    CHECK(MoveValidator::isValid(b, 1, 0, 0, 2));
+    CHECK_FALSE(MoveValidator::isValid(b, 1, 0, 1, 2));
 }
 
 int main()
