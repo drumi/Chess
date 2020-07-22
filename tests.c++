@@ -129,8 +129,20 @@ TEST_CASE("casting movement validator")
 TEST_CASE("Square under attack")
 {
     Board b;
+
     CHECK(MoveValidator::isSquareUnderAttack(b, 0, 2, false));
     CHECK(MoveValidator::isSquareUnderAttack(b, 2, 2, false));
+
+    b.move(0, 0, 4, 4);
+
+    assert(((*b.getPieces())[4][4].getType() == PieceType::ROOK));
+
+    CHECK(MoveValidator::isSquareUnderAttack(b, 6, 4, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b, 2, 4, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b, 4, 6, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b, 4, 5, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b, 4, 2, false));
+
 }
 
 int main()
