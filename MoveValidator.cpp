@@ -64,6 +64,44 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                 return false;
             break;
         case PieceType::BISHOP:
+            if(xdest - ydest != x - y && xdest + ydest != x + y)
+                return false;
+            else if(xdest - ydest == x - y)
+            {
+                int minx = std::min(xdest,x);
+                int miny = std::min(ydest, y);
+                
+                int maxx = std::max(xdest,x);
+                int maxy = std::max(ydest, y);
+
+                ++minx;
+                ++miny;
+                while(minx != maxx)
+                {
+                    if((*pieces)[miny][minx].getType() != PieceType::EMPTY)
+                        return false;
+                    ++minx;
+                    ++miny;
+                }
+            }
+            else if(xdest + ydest == x + y)
+            {
+                int minx = std::min(xdest,x);
+                int miny = std::min(ydest, y);
+                
+                int maxx = std::max(xdest,x);
+                int maxy = std::max(ydest, y);
+
+                ++minx;
+                --maxy;
+                while(minx != maxx)
+                {
+                    if((*pieces)[maxy][minx].getType() != PieceType::EMPTY)
+                        return false;
+                    ++minx;
+                    --maxy;
+                }
+            }
             break;
         case PieceType::QUEEN:
             break;
