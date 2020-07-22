@@ -1,6 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
 #include "MoveValidator.h"
+#include <cassert>
 
 TEST_CASE("pawn validator test")
 {
@@ -48,6 +49,22 @@ TEST_CASE("rook movement validator")
     CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 0, 7));
     CHECK_FALSE(MoveValidator::isValid(b, 0, 0, 1, 2));
 }
+
+TEST_CASE("bishop movement validator")
+{
+    Board b;
+    b.move(2,0,2,2);
+    assert(((*b.getPieces())[2][2].getType() == PieceType::BISHOP));
+    CHECK(MoveValidator::isValid(b, 2, 2, 5, 5));
+    CHECK(MoveValidator::isValid(b, 2, 2, 6, 6));
+    CHECK(MoveValidator::isValid(b, 2, 2, 0, 4));
+    CHECK(MoveValidator::isValid(b, 2, 2, 1, 3));
+    CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 7, 7));
+    CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 5, 4));
+    CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 5, 2));
+    CHECK_FALSE(MoveValidator::isValid(b, 2, 2, 1, 1));
+}
+
 
 int main()
 {
