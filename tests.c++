@@ -105,11 +105,12 @@ TEST_CASE("king movement validator")
 {
     Board b;
     b.move(4, 0, 4, 4);
+    
     CHECK(((*b.getPieces())[4][4].getType() == PieceType::KING));
-    CHECK(MoveValidator::isValid(b, 4, 4, 5, 5));
     CHECK(MoveValidator::isValid(b, 4, 4, 3, 3));
     CHECK(MoveValidator::isValid(b, 4, 4, 3, 4));
 
+    CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 5, 5));
     CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 6, 4));
     CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 2, 4));
     CHECK_FALSE(MoveValidator::isValid(b, 4, 4, 1, 1));
@@ -156,8 +157,10 @@ TEST_CASE("Square under attack")
 {
     Board b;
 
-    CHECK(MoveValidator::isSquareUnderAttack(b, 0, 2, false));
-    CHECK(MoveValidator::isSquareUnderAttack(b, 2, 2, false));
+    for (size_t i = 0; i < 8; i++)
+    {
+        CHECK(MoveValidator::isSquareUnderAttack(b, i, 2, false));
+    }
 
     b.move(0, 0, 4, 4);
 
@@ -203,34 +206,26 @@ TEST_CASE("Square under attack")
     CHECK(MoveValidator::isSquareUnderAttack(b4, 2, 2, false));
     CHECK(MoveValidator::isSquareUnderAttack(b4, 3, 2, false));
     CHECK(MoveValidator::isSquareUnderAttack(b4, 4, 2, false));
-}
 
-TEST_CASE("King under attack")
-{
-    Board b;
 
-    b.move(4, 0, 4, 4);
-    b.move(3, 6, 3, 5);
+    Board b5;
+    b5.move(3, 7, 3, 3);
 
-    CHECK(((*b.getPieces())[4][4].getType() == PieceType::KING));
-    CHECK(((*b.getPieces())[5][3].getType() == PieceType::PAWN));
+    CHECK(((*b5.getPieces())[3][3].getType() == PieceType::QUEEN));
 
-    CHECK(MoveValidator::isKingUnderCheck(b, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 2, 4, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 3, 4, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 4, 4, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 2, 3, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 4, 3, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 2, 2, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 3, 2, true));
+    CHECK(MoveValidator::isSquareUnderAttack(b5, 4, 2, true));
 
-    Board b2;
+    Board b10;
+    b10.move(4, 0, 4, 4);
 
-    CHECK_FALSE(MoveValidator::isKingUnderCheck(b2, false));
-    
-    b2.move(4, 0, 4, 4);
-
-    CHECK_FALSE(MoveValidator::isKingUnderCheck(b2, false));
-
-    b2.move(7, 7, 7, 4);
-
-    CHECK(((*b2.getPieces())[4][4].getType() == PieceType::KING));
-    CHECK(((*b2.getPieces())[4][7].getType() == PieceType::ROOK));
-
-    CHECK(MoveValidator::isKingUnderCheck(b2, false));
+    CHECK(MoveValidator::isSquareUnderAttack(b10, 5, 5, true));
 }
 
 TEST_CASE("Board copying")
@@ -269,6 +264,13 @@ TEST_CASE("En passant validator")
     b2.move(4, 7, 4, 5);
 
     CHECK_FALSE(MoveValidator::isValid(b2, 3, 3, 2, 2, 2));
+
+    Board b7;
+
+    b7.move(1, 6, 1, 3);
+    b7.move(0, 1, 0, 3);
+
+    CHECK(MoveValidator::isValid(b7, 1, 3, 0, 2, 0));
 }
 
 TEST_CASE("Move Generate")
@@ -313,6 +315,75 @@ TEST_CASE("Move Generate")
     result = MoveGenerator::Generate(b5, true);
     
     CHECK(result.size() == 27);
+
+    Board b6;
+
+    b6.move(1, 6, 1, 2);
+
+    result = MoveGenerator::Generate(b6, true);
+    
+    CHECK(result.size() == 22);
+
+    Board b7;
+
+    b7.move(1, 6, 1, 3);
+    b7.move(0, 1, 0, 3);
+
+    result = MoveGenerator::Generate(b7, true, 0);
+    
+    CHECK(result.size() == 22);
+
+    Board b8;
+
+    b8.move(4, 7, 4, 3);
+
+    result = MoveGenerator::Generate(b8, true);
+    
+    CHECK(result.size() == 26);
+}
+
+TEST_CASE("King under attack")
+{
+    Board b;
+
+    b.move(4, 0, 4, 4);
+    b.move(3, 6, 3, 5);
+
+    CHECK(((*b.getPieces())[4][4].getType() == PieceType::KING));
+    CHECK(((*b.getPieces())[5][3].getType() == PieceType::PAWN));
+
+    CHECK(MoveValidator::isKingUnderCheck(b, false));
+
+    Board b2;
+
+    CHECK_FALSE(MoveValidator::isKingUnderCheck(b2, false));
+    
+    b2.move(4, 0, 4, 4);
+
+    CHECK_FALSE(MoveValidator::isKingUnderCheck(b2, false));
+
+    b2.move(7, 7, 7, 4);
+
+    CHECK(((*b2.getPieces())[4][4].getType() == PieceType::KING));
+    CHECK(((*b2.getPieces())[4][7].getType() == PieceType::ROOK));
+
+    CHECK(MoveValidator::isKingUnderCheck(b2, false));
+
+    Board b3;
+
+    b3.move(4, 0, 6, 5);
+    CHECK(MoveValidator::isKingUnderCheck(b3, false));
+
+    Board b4;
+
+    b4.move(4, 7, 6, 2);
+    CHECK(MoveValidator::isKingUnderCheck(b4, true));
+
+    Board b5;
+
+    b5.move(4, 0, 4, 4);
+    b5.move(1, 7, 2, 5);
+    CHECK(MoveValidator::isKingUnderCheck(b5, false));
 }
 
 int main()
