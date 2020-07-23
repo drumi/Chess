@@ -2,7 +2,7 @@
 
 #include "Piece.h"
 #include <vector>
-#include <ostream>
+#include <iostream>
 
 typedef Piece const (*boardArrPtr)[8][8];
 

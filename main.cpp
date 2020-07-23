@@ -8,12 +8,13 @@
 
 int main( int argc, char* args[] )
 {
-    GraphicGame g(100, 100, 400);
+    GraphicGame g(100, 100, 600);
     
     while(g.isRunning())
     {
         g.render();
         g.handleEvents();
+        SDL_Delay(100);
     }
 
     return 0;    
