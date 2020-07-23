@@ -32,11 +32,16 @@ bool Game::tryMove(int x, int y, int xdest, int ydest)
     
     if(MoveValidator::isValid(m_board, x, y, xdest, ydest, xEnpassant))
     {
-        m_board.move(x, y, xdest, ydest);
 
         // Handle en passant
-        if(toMove.getType() == PieceType::PAWN && xdest == xEnpassant && (y == 2 && !m_isWhiteTurn || y == 5 && !m_isWhiteTurn))
-            m_board.remove(xdest, ydest - m_isWhiteTurn + 2 * !m_isWhiteTurn);
+        if(toMove.getType() == PieceType::PAWN && xdest == xEnpassant)
+            if(ydest == 2 && m_isWhiteTurn)
+                m_board.remove(xdest, 3);
+            else if(ydest == 5 && !m_isWhiteTurn)
+                m_board.remove(xdest, 4);
+
+        // Move
+        m_board.move(x, y, xdest, ydest);
 
         // Handle pawn promotion
         if(toMove.getType() == PieceType::PAWN && (ydest == 0 || ydest == 7))

@@ -9,15 +9,24 @@
 class GraphicGame
 {
     private:
-    int const BORDER_PIXEL_OFFSET;
-    int const SQUARE_SIZE;
+    double const BORDER_PIXEL_OFFSET;
+    double const SQUARE_SIZE;
     bool m_isRunning;
     Game m_game;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     std::unordered_map<char const*, SDL_Texture*> textures;
 
+    struct Move
+    {
+        bool hasSource = false;
+        int x, y, destx, desty;
+    };
+
+    Move m_nextMove;
+
     void loadTextures();
+    void move(Move& m);
 
     public:
     GraphicGame(int x, int y, int w);
