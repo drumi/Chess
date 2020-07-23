@@ -7,9 +7,12 @@ void Game::undoMove()
 {
     if(!m_boardHistory.empty())
     {
-        m_board = m_boardHistory.top();
         m_boardHistory.pop();
         m_pieceHistory.pop();
+        if(!m_boardHistory.empty())
+            m_board = m_boardHistory.top();
+        else
+            m_board = Board();
         m_isWhiteTurn = !m_isWhiteTurn;
     }
 }
@@ -56,6 +59,7 @@ bool Game::tryMove(int x, int y, int xdest, int ydest)
 
         m_pieceHistory.push({toMove.getType(), x, y, xdest, ydest});
         m_boardHistory.push(m_board);
+
         m_isWhiteTurn = !m_isWhiteTurn;
         return true;
     } 
