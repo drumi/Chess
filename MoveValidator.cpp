@@ -187,7 +187,7 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                         return false;
                     if(((*pieces)[y][x - 1].getType() != PieceType::EMPTY) || ((*pieces)[y][x - 2].getType() != PieceType::EMPTY || ((*pieces)[y][x - 3].getType() != PieceType::EMPTY)))
                         return false;
-                    if(isSquareUnderAttack(board, x, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 1, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 2, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 3, y, !piece.isWhite()))
+                    if(isSquareUnderAttack(board, x, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 1, y, !piece.isWhite()) || isSquareUnderAttack(board, x - 2, y, !piece.isWhite()))
                         return false;
                 }
             }

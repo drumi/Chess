@@ -12,6 +12,8 @@ class GraphicGame
     double const BORDER_PIXEL_OFFSET;
     double const SQUARE_SIZE;
     bool m_isRunning;
+    bool m_usingAI;
+
     Game m_game;
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
@@ -29,7 +31,7 @@ class GraphicGame
     void move(Move& m);
 
     public:
-    GraphicGame(int x, int y, int w);
+    GraphicGame(int x, int y, int w, bool m_usingAI = false);
     ~GraphicGame();
     void render();
     void handleEvents();
