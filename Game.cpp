@@ -17,6 +17,17 @@ void Game::undoMove()
     }
 }
 
+void Game::undoMoveTillWhite()
+{
+    if(m_isWhiteTurn)
+    {
+        undoMove();
+        undoMove();
+    }
+    else
+        undoMove();
+}
+
 bool Game::tryMove(int x, int y, int xdest, int ydest)
 {
     int xEnpassant = -999;

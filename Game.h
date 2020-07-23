@@ -25,6 +25,7 @@ class Game
     bool tryMove(int x, int y, int xdest, int ydest);
     bool isWhiteTurn() const { return m_isWhiteTurn; }
     void undoMove();
+    void undoMoveTillWhite();
     Board getBoard() const { return m_board;}
     void restart();
 };

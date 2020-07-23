@@ -1,5 +1,6 @@
 #include "GraphicGame.h"
 #include "TextureLoader.h"
+#include "ChessAI.h"
 #include <iostream>
 
 namespace {
@@ -186,7 +187,11 @@ void GraphicGame::handleEvents()
             }
             else if(event.button.button == SDL_BUTTON_RIGHT)
             {
-                m_game.undoMove();
+                if(m_usingAI)
+                    m_game.undoMoveTillWhite();
+                else
+                    m_game.undoMove();
+
                 m_nextMove.hasSource = false;
             }
             else if(event.button.button == SDL_BUTTON_MIDDLE)
@@ -204,5 +209,41 @@ void GraphicGame::handleEvents()
 void GraphicGame::move(Move& m)
 {
     m.hasSource = false;
-    m_game.tryMove(m.x, m.y, m.destx, m.desty);
+
+    if(checkGameOver())
+        return;
+
+    bool successfulMove = m_game.tryMove(m.x, m.y, m.destx, m.desty);
+
+    if(successfulMove && m_usingAI)
+        moveAI();
+        
+}
+
+void GraphicGame::moveAI()
+{
+    if(checkGameOver())
+        return;
+
+    MoveResult r = ChessAI::GetMove(m_game.getBoard(), false, 1);
+    m_game.tryMove(r.x, r.y, r.xdest, r.ydest);
+}
+
+bool GraphicGame::checkGameOver()
+{
+    int size = MoveGenerator::Generate(m_game.getBoard(), m_game.isWhiteTurn()).size(); // Ignoring En passant for now
+
+    if(size == 0)
+    {
+        if(MoveValidator::isKingUnderCheck(m_game.getBoard(), m_game.isWhiteTurn()))
+        {
+            std::cout << "Checkmate" << std::endl;
+        }
+        else
+        {
+            std::cout << "Stalemate" << std::endl;
+        }
+        return true;
+    }
+    return false;
 }
