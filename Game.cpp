@@ -38,6 +38,10 @@ bool Game::tryMove(int x, int y, int xdest, int ydest)
         if(toMove.getType() == PieceType::PAWN && xdest == xEnpassant && (y == 2 && !m_isWhiteTurn || y == 5 && !m_isWhiteTurn))
             m_board.remove(xdest, ydest - m_isWhiteTurn + 2 * !m_isWhiteTurn);
 
+        // Handle pawn promotion
+        if(toMove.getType() == PieceType::PAWN && (ydest == 0 || ydest == 7))
+            m_board.setPieceType(xdest, ydest, PieceType::QUEEN);
+
         // Handle castling
         if(toMove.getType() == PieceType::KING && abs(xdest - x) == 2)
             if(xdest > x)
