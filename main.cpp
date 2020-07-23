@@ -1,12 +1,23 @@
 #include <iostream>
 #include "Board.h"
 #include "MoveValidator.h"
+#include "Game.h"
 
-/*
+
 int main()
 {
-   Board b;
-   MoveValidator::isValid(b, 1, 1, 1, 2);
-   
-   return 0;
-}*/
+   Game game;
+
+   while(true)
+   {
+      system("cls");
+      int x, y , xdest , ydest;
+      
+      std::cout << (game.getBoard()) << std::endl;
+
+      std::cin >> x >> y >> xdest >> ydest;
+
+      game.tryMove(x, y, xdest, ydest);
+
+   }
+}

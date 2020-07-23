@@ -1,5 +1,8 @@
 #include "Game.h"
 
+Game::Game()
+:m_isWhiteTurn(true){}
+
 void Game::undoMove()
 {
     if(!m_boardHistory.empty())
@@ -14,10 +17,13 @@ void Game::undoMove()
 bool Game::tryMove(int x, int y, int xdest, int ydest)
 {
     int xEnpassant = -999;
-    Tuple lastMove = m_pieceHistory.top();
-    if(lastMove.pieceType == PieceType::PAWN)
-        if(abs(lastMove.y - lastMove.ydest) == 2)
-            xEnpassant = lastMove.x;
+    if(!m_pieceHistory.empty())
+    {
+        Tuple lastMove = m_pieceHistory.top();
+        if(lastMove.pieceType == PieceType::PAWN)
+            if(abs(lastMove.y - lastMove.ydest) == 2)
+                xEnpassant = lastMove.x;
+    }
 
     Piece toMove = m_board.getPiece(x, y);
 
@@ -41,8 +47,17 @@ bool Game::tryMove(int x, int y, int xdest, int ydest)
 
         m_pieceHistory.push({toMove.getType(), x, y, xdest, ydest});
         m_boardHistory.push(m_board);
+        m_isWhiteTurn = !m_isWhiteTurn;
         return true;
     } 
 
     return false;
+}
+
+void Game::restart()
+{
+    m_board = Board();
+    m_isWhiteTurn = true;
+    m_boardHistory = std::stack<Board>();
+    m_pieceHistory = std::stack<Tuple>();
 }
