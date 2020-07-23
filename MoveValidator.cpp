@@ -7,13 +7,14 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
 {
     boardArrPtr pieces = board.getPieces();
     // Check if coordinates are out of bounds or they are the same
-    if(x > 8 || y > 8 || x < 0 || y < 0 || xdest > 8 || ydest > 8 || xdest < 0 || ydest < 0 || (x == xdest && y == ydest))
+    if(x >= 8 || y >= 8 || x < 0 || y < 0 || xdest >= 8 || ydest >= 8 || xdest < 0 || ydest < 0 || (x == xdest && y == ydest))
         return false;
     // Check if we go on piece with same color
     if((*pieces)[y][x].isWhite() == (*pieces)[ydest][xdest].isWhite() && (*pieces)[ydest][xdest].getType() != PieceType::EMPTY)
         return false;    
 
     Piece piece = (*pieces)[y][x];
+
     // Check if move is valid for piece (does not check illegal moves for exposing king)
     switch (piece.getType())
     {
@@ -60,7 +61,7 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             else if(y == ydest) 
             {
                 // Check if there are no figures between
-                for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest) - 1; ++i)
+                for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest); ++i)
                     if((*pieces)[y][i].getType() != PieceType::EMPTY)
                         return false;
             }
@@ -75,10 +76,10 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                 return false;
             else if(xdest - ydest == x - y)
             {
-                int minx = std::min(xdest,x);
+                int minx = std::min(xdest, x);
                 int miny = std::min(ydest, y);
                 
-                int maxx = std::max(xdest,x);
+                int maxx = std::max(xdest, x);
                 int maxy = std::max(ydest, y);
 
                 ++minx;
@@ -123,46 +124,46 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
                 else if(y == ydest) 
                 {
                     // Check if there are no figures between
-                    for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest) - 1; ++i)
+                    for(int i = std::min(x, xdest) + 1; i < std::max(x, xdest); ++i)
                         if((*pieces)[y][i].getType() != PieceType::EMPTY)
                             return false;
                 }
                 else if(xdest - ydest == x - y)
-            {
-                int minx = std::min(xdest,x);
-                int miny = std::min(ydest, y);
-                
-                int maxx = std::max(xdest,x);
-                int maxy = std::max(ydest, y);
-
-                ++minx;
-                ++miny;
-                while(minx != maxx)
                 {
-                    if((*pieces)[miny][minx].getType() != PieceType::EMPTY)
-                        return false;
+                    int minx = std::min(xdest,x);
+                    int miny = std::min(ydest, y);
+                    
+                    int maxx = std::max(xdest,x);
+                    int maxy = std::max(ydest, y);
+
                     ++minx;
                     ++miny;
+                    while(minx != maxx)
+                    {
+                        if((*pieces)[miny][minx].getType() != PieceType::EMPTY)
+                            return false;
+                        ++minx;
+                        ++miny;
+                    }
                 }
-            }
-            else if(xdest + ydest == x + y)
-            {
-                int minx = std::min(xdest,x);
-                int miny = std::min(ydest, y);
-                
-                int maxx = std::max(xdest,x);
-                int maxy = std::max(ydest, y);
-
-                ++minx;
-                --maxy;
-                while(minx != maxx)
+                else if(xdest + ydest == x + y)
                 {
-                    if((*pieces)[maxy][minx].getType() != PieceType::EMPTY)
-                        return false;
+                    int minx = std::min(xdest,x);
+                    int miny = std::min(ydest, y);
+                    
+                    int maxx = std::max(xdest,x);
+                    int maxy = std::max(ydest, y);
+
                     ++minx;
                     --maxy;
+                    while(minx != maxx)
+                    {
+                        if((*pieces)[maxy][minx].getType() != PieceType::EMPTY)
+                            return false;
+                        ++minx;
+                        --maxy;
+                    }
                 }
-            }
             break;
         case PieceType::KING:
             if(abs(y - ydest) > 1 || abs(x - xdest) > 2) // Check if we move more than allowed
