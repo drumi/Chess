@@ -7,9 +7,9 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
     boardArrPtr pieces = board.getPieces();
     std::vector<Board> result;
 
-    for (size_t x = 0; x < 8; x++)
+    for (int x = 0; x < 8; x++)
     {
-        for (size_t y = 0; y < 8; y++)
+        for (int y = 0; y < 8; y++)
         {
             if((*pieces)[y][x].getType() == PieceType::EMPTY || (*pieces)[y][x].isWhite() != generateForWhite)
                 continue;
@@ -21,7 +21,7 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                 {
                     if(MoveValidator::isValid(board, x, y, x, y - 2))
                         result.push_back(Board(board).move(x, y, x, y - 2));
-                    for (size_t i = -1; i <= 1; i++)
+                    for (int i = -1; i <= 1; i++)
                     {
                         if(MoveValidator::isValid(board, x, y, x + i, y - 1, xEnpassant))
                             if(x + i == xEnpassant && y == 2)
@@ -35,7 +35,7 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                 {
                     if(MoveValidator::isValid(board, x, y, x, y + 2))
                         result.push_back(Board(board).move(x, y, x, y + 2));
-                    for (size_t i = -1; i <= 1; i++)
+                    for (int i = -1; i <= 1; i++)
                     {
                         if(MoveValidator::isValid(board, x, y, x + i, y + 1, xEnpassant))
                             if(x + i == xEnpassant && y == 5)
@@ -47,7 +47,7 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                 
                 break;
             case PieceType::ROOK:
-                for (size_t i = 0; i < 8; ++i)
+                for (int i = 0; i < 8; ++i)
                 {
                     if(MoveValidator::isValid(board, x, y, i, y))
                         result.push_back(Board(board).move(x, y, i, y));
@@ -66,7 +66,7 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                     }
                 break;
             case PieceType::BISHOP:
-                for (size_t i = x; i < 8; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if(MoveValidator::isValid(board, x, y, x + i, y + i))
                         result.push_back(Board(board).move(x, y, x + i, y + i));
@@ -74,12 +74,12 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                         result.push_back(Board(board).move(x, y, x + i, y - i));
                     if(MoveValidator::isValid(board, x, y, x - i, y + i))
                         result.push_back(Board(board).move(x, y, x - i, y + i));
-                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                    if(MoveValidator::isValid(board, x, y, x - i, y - i))
                         result.push_back(Board(board).move(x, y, x - i, y - i));
                 }
                 break;
             case PieceType::QUEEN:
-                for (size_t i = x; i < 8; i++)
+                for (int i = 0; i < 8; i++)
                 {
                     if(MoveValidator::isValid(board, x, y, x + i, y + i))
                         result.push_back(Board(board).move(x, y, x + i, y + i));
@@ -87,10 +87,10 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                         result.push_back(Board(board).move(x, y, x + i, y - i));
                     if(MoveValidator::isValid(board, x, y, x - i, y + i))
                         result.push_back(Board(board).move(x, y, x - i, y + i));
-                    if(MoveValidator::isValid(board, x, y, x + i, y + i))
+                    if(MoveValidator::isValid(board, x, y, x - i, y - i))
                         result.push_back(Board(board).move(x, y, x - i, y - i));
                 }
-                for (size_t i = 0; i < 8; ++i)
+                for (int i = 0; i < 8; ++i)
                 {
                     if(MoveValidator::isValid(board, x, y, i, y))
                         result.push_back(Board(board).move(x, y, i, y));
