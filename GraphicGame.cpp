@@ -17,11 +17,12 @@ namespace {
     char const* black_queen = "black_queen";
     char const* white_bishop = "white_bishop";
     char const* black_bishop = "black_bishop";
-
+    char const* checkmate = "checkmate";
+    char const* stalemate = "stalemate";
 }
 
 GraphicGame::GraphicGame(int x, int y, int w, bool usingAI)
-:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8), m_usingAI(usingAI)
+:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8), m_usingAI(usingAI), m_gameState(GameState::NORMAL)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     m_window = SDL_CreateWindow("Chess", x, y, w, w, SDL_WINDOW_SHOWN);
@@ -54,6 +55,8 @@ void GraphicGame::loadTextures()
     textures[black_knight] = TextureLoader::Load(m_renderer, "Assets/Chess_ndt60.bmp");
     textures[white_bishop] = TextureLoader::Load(m_renderer, "Assets/Chess_blt60.bmp");
     textures[black_bishop] = TextureLoader::Load(m_renderer, "Assets/Chess_bdt60.bmp");
+    textures[stalemate] = TextureLoader::Load(m_renderer, "Assets/stalemate.bmp");
+    textures[checkmate] = TextureLoader::Load(m_renderer, "Assets/checkmate.bmp");
 }
 
 void GraphicGame::render()
@@ -123,7 +126,25 @@ void GraphicGame::render()
             }
         
         }
-        
+    }
+
+    if(m_gameState == GameState::CHECKMATE)
+    {
+        SDL_Rect rect;
+        rect.x = 2 * SQUARE_SIZE + BORDER_PIXEL_OFFSET;
+        rect.y = 2 * SQUARE_SIZE + BORDER_PIXEL_OFFSET;
+        rect.h = 4 * SQUARE_SIZE;
+        rect.w = 4 * SQUARE_SIZE;
+        SDL_RenderCopy(m_renderer, textures[checkmate], NULL, &rect);
+    }
+    else if (m_gameState == GameState::CHECKMATE)
+    {
+        SDL_Rect rect;
+        rect.x = 2 * SQUARE_SIZE + BORDER_PIXEL_OFFSET;
+        rect.y = 2 * SQUARE_SIZE + BORDER_PIXEL_OFFSET;
+        rect.h = 4 * SQUARE_SIZE;
+        rect.w = 4 * SQUARE_SIZE;
+        SDL_RenderCopy(m_renderer, textures[stalemate], NULL, &rect);
     }
 
     if(m_nextMove.hasSource)
@@ -187,6 +208,7 @@ void GraphicGame::handleEvents()
             }
             else if(event.button.button == SDL_BUTTON_RIGHT)
             {
+                m_gameState = GameState::NORMAL;
                 if(m_usingAI)
                     m_game.undoMoveTillWhite();
                 else
@@ -196,6 +218,7 @@ void GraphicGame::handleEvents()
             }
             else if(event.button.button == SDL_BUTTON_MIDDLE)
             {
+                m_gameState = GameState::NORMAL;
                 m_nextMove.hasSource = false;
                 m_game.restart();
             }
@@ -237,13 +260,14 @@ bool GraphicGame::checkGameOver()
     {
         if(MoveValidator::isKingUnderCheck(m_game.getBoard(), m_game.isWhiteTurn()))
         {
-            std::cout << "Checkmate" << std::endl;
+            m_gameState = GameState::CHECKMATE;
         }
         else
         {
-            std::cout << "Stalemate" << std::endl;
+            m_gameState = GameState::STALEMATE;
         }
         return true;
-    }
+    } 
+    
     return false;
 }

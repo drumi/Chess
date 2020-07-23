@@ -25,7 +25,15 @@ class GraphicGame
         int x, y, destx, desty;
     };
 
+    enum GameState
+    {
+        CHECKMATE,
+        STALEMATE,
+        NORMAL
+    };
+
     Move m_nextMove;
+    GameState m_gameState;
 
     void loadTextures();
     void move(Move& m);
