@@ -26,6 +26,8 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                         if(MoveValidator::isValid(board, x, y, x + i, y - 1, xEnpassant))
                             if(x + i == xEnpassant && y == 2)
                                 result.push_back(Board(board).move(x, y, x + i, y - 1).remove(xEnpassant, 3));
+                            else if(y == 0)
+                                result.push_back(Board(board).move(x, y, x + i, y - 1).setPieceType(x + i, 0, PieceType::QUEEN));
                             else
                                 result.push_back(Board(board).move(x, y, x + i, y - 1));
                     }
@@ -40,6 +42,8 @@ std::vector<Board> MoveGenerator::Generate(Board const& board, bool generateForW
                         if(MoveValidator::isValid(board, x, y, x + i, y + 1, xEnpassant))
                             if(x + i == xEnpassant && y == 5)
                                 result.push_back(Board(board).move(x, y, x + i, y + 1).remove(xEnpassant, 4));
+                            else if(y == 7)
+                                result.push_back(Board(board).move(x, y, x + i, y + 1).setPieceType(x + i, 0, PieceType::QUEEN));
                             else
                                 result.push_back(Board(board).move(x, y, x + i, y + 1));
                     }
