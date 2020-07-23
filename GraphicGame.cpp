@@ -133,7 +133,17 @@ void GraphicGame::render()
         rect.h = SQUARE_SIZE;
         rect.w = SQUARE_SIZE;
 
-        SDL_RenderDrawRect(m_renderer, &rect);
+        if(m_game.isWhiteTurn())
+        {
+            SDL_SetRenderDrawColor(m_renderer, 255, 255, 255, 255);
+            SDL_RenderDrawRect(m_renderer, &rect);
+            SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+        }
+        else
+        {
+            SDL_RenderDrawRect(m_renderer, &rect);
+        }
+        
     }
 
     SDL_RenderPresent(m_renderer);
