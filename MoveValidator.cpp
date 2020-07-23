@@ -197,7 +197,7 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             break;
     }
 
-    return !isKingUnderCheck(board, !piece.isWhite());
+    return !isKingUnderCheck(Board(board).move(x, y, xdest, ydest), piece.isWhite());
 }
 
 bool MoveValidator::isSquareUnderAttack(Board const& board, int x, int y, bool fromWhite)
@@ -272,12 +272,12 @@ bool MoveValidator::isKingUnderCheck(Board const& board, bool isWhite)
 {
     boardArrPtr pieces = board.getPieces();
 
-    for (size_t i = 0; i < 8; ++i)
+    for (int y = 0; y < 8; ++y)
     {
-        for (size_t j = 0; j < 8; ++j)
+        for (int x = 0; x < 8; ++x)
         {
-            if((*pieces)[i][j].getType() == PieceType::KING && (*pieces)[i][j].isWhite() == isWhite)
-                return isSquareUnderAttack(board, j, i, !isWhite);
+            if((*pieces)[y][x].getType() == PieceType::KING && (*pieces)[y][x].isWhite() == isWhite)
+                return isSquareUnderAttack(board, x, y, !isWhite);
         }
         
     }
