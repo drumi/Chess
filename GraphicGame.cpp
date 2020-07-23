@@ -19,8 +19,8 @@ namespace {
 
 }
 
-GraphicGame::GraphicGame(int x, int y, int w)
-:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8)
+GraphicGame::GraphicGame(int x, int y, int w, bool usingAI)
+:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8), m_usingAI(usingAI)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     m_window = SDL_CreateWindow("Chess", x, y, w, w, SDL_WINDOW_SHOWN);
