@@ -29,6 +29,8 @@ class GraphicGame
 
     void loadTextures();
     void move(Move& m);
+    void moveAI();
+    bool checkGameOver();
 
     public:
     GraphicGame(int x, int y, int w, bool m_usingAI = false);

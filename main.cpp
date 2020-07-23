@@ -8,7 +8,7 @@
 
 int main( int argc, char* args[] )
 {
-    GraphicGame g(100, 100, 600);
+    GraphicGame g(100, 100, 600, true);
     
     while(g.isRunning())
     {
