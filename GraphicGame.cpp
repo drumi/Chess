@@ -21,8 +21,8 @@ namespace {
     char const* stalemate = "stalemate";
 }
 
-GraphicGame::GraphicGame(int x, int y, int w, bool usingAI)
-:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8), m_usingAI(usingAI), m_gameState(GameState::NORMAL)
+GraphicGame::GraphicGame(int x, int y, int w, bool usingAI, int AIDepth)
+:m_isRunning(true), BORDER_PIXEL_OFFSET(w / 23), SQUARE_SIZE((w - 2 * BORDER_PIXEL_OFFSET)/8), m_usingAI(usingAI), m_gameState(GameState::NORMAL), m_AIDepth(AIDepth)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
     m_window = SDL_CreateWindow("Chess", x, y, w, w, SDL_WINDOW_SHOWN);
@@ -137,7 +137,7 @@ void GraphicGame::render()
         rect.w = 4 * SQUARE_SIZE;
         SDL_RenderCopy(m_renderer, textures[checkmate], NULL, &rect);
     }
-    else if (m_gameState == GameState::CHECKMATE)
+    else if (m_gameState == GameState::STALEMATE)
     {
         SDL_Rect rect;
         rect.x = 2 * SQUARE_SIZE + BORDER_PIXEL_OFFSET;
@@ -248,7 +248,7 @@ void GraphicGame::moveAI()
     if(checkGameOver())
         return;
 
-    MoveResult r = ChessAI::GetMove(m_game.getBoard(), false, 3);
+    MoveResult r = ChessAI::GetMove(m_game.getBoard(), false, m_AIDepth);
     m_game.tryMove(r.x, r.y, r.xdest, r.ydest);
 }
 

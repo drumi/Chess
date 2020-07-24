@@ -10,9 +10,7 @@ class Board
 {
     private:
     Piece m_board[8][8];
-    int m_score;
     void init();
-    void recalculateScore(Piece p, bool remove);
 
     public:
     Board();
@@ -24,7 +22,6 @@ class Board
     Piece getPiece(int x, int y) const { return m_board[y][x]; }
     Board& remove(int x, int y);
     bool operator == (Board const& other) const;
-    int getScore() const { return m_score; }
 };
 
 std::ostream& operator << (std::ostream& out, Board const& board);
