@@ -11,6 +11,7 @@ class GraphicGame
     private:
     double const BORDER_PIXEL_OFFSET;
     double const SQUARE_SIZE;
+    int m_AIDepth;
     bool m_isRunning;
     bool m_usingAI;
 
@@ -41,7 +42,7 @@ class GraphicGame
     bool checkGameOver();
 
     public:
-    GraphicGame(int x, int y, int w, bool m_usingAI = false);
+    GraphicGame(int x, int y, int w, bool m_usingAI = false, int AIDepth = 3);
     ~GraphicGame();
     void render();
     void handleEvents();
