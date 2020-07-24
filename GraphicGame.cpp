@@ -248,7 +248,7 @@ void GraphicGame::moveAI()
     if(checkGameOver())
         return;
 
-    MoveResult r = ChessAI::GetMove(m_game.getBoard(), false, 1);
+    MoveResult r = ChessAI::GetMove(m_game.getBoard(), false, 3);
     m_game.tryMove(r.x, r.y, r.xdest, r.ydest);
 }
 

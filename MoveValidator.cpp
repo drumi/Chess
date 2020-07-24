@@ -22,6 +22,11 @@ bool MoveValidator::isValid(Board const& board, int x, int y, int xdest, int yde
             return false;
             break;
         case PieceType::PAWN:
+            if(abs(ydest - y) == 2)
+                if(ydest > y && (*pieces)[ydest - 1][x].getType() != PieceType::EMPTY)
+                    return false;
+                else if(ydest < y && (*pieces)[ydest + 1][x].getType() != PieceType::EMPTY)
+                    return false;
             if(ydest - y >= 0 && piece.isWhite() || ydest - y <= 0 && !piece.isWhite()) // Check if pawn moves in the right direction
                 return false;
             else if(x == xdest && (*pieces)[ydest][xdest].getType() != PieceType::EMPTY) // Check if when pawn moves forward there are no figures blocking
